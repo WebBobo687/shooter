@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Shooter</title>
+</head>
+<body>
+    <div id="game" class="game">
+        <div id="player" class="player"></div>
+        <div id="score" class="score">
+            <p>0</p>
+        </div>
+    </div>
+    <script>
+        let press = null;
+        let code = null;
+        const playerWidth = 100;
+        const playerHeight = 100;
+        const ennemyWidth = 70;
+        const ennemyHeight = 70;
+        const bulletWidth = 10;
+        const bulletHeight = 10;
+        const ennemies = [];
+        const bullets = []
+        let playerLeft = (window.innerWidth - playerWidth) / 2;
+        let playerTop = (window.innerHeight - playerHeight);
+
+        //DOM Instance
+        var game = document.getElementById('game');
+        var player = document.getElementById('player');
+
+        //position & size
+        player.style.width = playerWidth + 'px';
+        player.style.height = playerHeight + 'px';
+        
+        window.addEventListener('keydown', function(event) {
+            code = event.keyCode;
+            press = true
+            
+            //create bullet
+            if (code == 32) {
+                const bullet = document.createElement('div');
+                bullet.style.width = bulletWidth + 'px';
+                bullet.style.height = bulletHeight + 'px';
+                bullet.style.left = parseInt(player.style.left) + ((playerWidth - bulletWidth) / 2) + 'px';
+                bullet.style.top = player.style.top;
+                bullet.className = 'bullet';
+                game.appendChild(bullet);
+                bullets.push(bullet);
+            }
+        })
+
+        window.addEventListener('keyup', function(event) {
+            press = false;
+        })
+
+        //function génération d'ennemis
+
+        function generate () {
+            const ennemy = document.createElement('div');
+            ennemy.style.width = ennemyWidth + 'px';
+            ennemy.style.height = ennemyHeight + 'px';
+            ennemy.style.left = Math.round(Math.random()* (window.innerWidth - ennemyWidth)) + 'px';
+            ennemy.style.top = 0 + 'px';
+            ennemy.className = 'ennemy';
+            game.appendChild (ennemy);
+            ennemies.push (ennemy);
+
+            //génère un autre ennemie
+            setTimeout(generate, Math.round(Math.random() * 5000));
+        }
+
+        generate()
+
+        //DRAW-------
+        function draw () {
+            if (press && code == 39 && playerLeft < window.innerWidth - playerWidth) {
+                playerLeft += 5;
+            }
+            
+            if (press && code == 37 && playerLeft >=0) {
+                playerLeft -= 5;
+            }
+
+            if (press && code == 38 && playerTop > 0) {
+                playerTop -= 5;
+            }
+
+            if (press && code == 40 && playerTop < window.innerHeight - playerHeight) {
+                playerTop += 5;
+            }
+            player.style.left = playerLeft + 'px';
+            player.style.top = playerTop + 'px';
+
+            //draw ennemie
+            for (let index = 0; index < ennemies.length; index++) {
+                const ennemy = ennemies[index];
+                ennemy.style.top = (parseInt(ennemy.style.top) + 2) + 'px';
+
+                if (parseInt(ennemy.style.top) > window.innerHeight - ennemyHeight) {
+                    game.removeChild(ennemy);
+                    ennemies.splice(index, 1);
+                }
+            }
+
+            //draw bullet
+            for (let index = 0; index < bullets.length; index++) {
+                const bullet = bullets[index];
+                bullet.style.top = (parseInt(bullet.style.top) - 2) + 'px';
+
+                if (parseInt(bullet.style.top) <0) {
+                    game.removeChild(bullet);
+                    bullets.splice(index, 1);
+                }
+            }
+
+            //collision
+            for (let i = 0; i < ennemies.length; i++) {
+                const ennemy = ennemies[i];
+                for (let j = 0; j <bullets.length; j++) {
+                    const bullet = bullets[j];
+
+                    if(bullet.offsetLeft +(bullet.clientWidth/2) > ennemy.offsetLeft
+                    && bullet.offsetLeft +(bullet.clientWidth/2) < ennemy.offsetLeft + ennemy.clientWidth
+                    && bullet.offsetTop +(bullet.clientHeight) > ennemy.offsetTop
+                    && bullet.offsetTop + (bullet.clientHeight) < ennemy.offsetTop + ennemy.clientHeight) {
+                        game.removeChild(ennemy);
+                        ennemies.splice(i, 1);
+
+                        game.removeChild(bullet);
+                        bullets.splice(j, 1);
+                    }
+                }
+
+                if (player.offsetLeft + player.clinetWdth > ennemy.offsetLeft
+                && player.offsetLeft + player.clientWidth < ennemy.offsetLeft + ennemy.clientWdth
+                && player.offsetTop + player.clientHeight > ennemy.offsetTop
+                && player/offsetTop + player.clientHeight < ennemy.offsetTop + ennemy.clientHeight) {
+                    game.removeChild(player);
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        
+
+    </script>
+</body>
+</html>

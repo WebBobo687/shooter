@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+}
+
+.game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background-image: url(./earth.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.player {
+    position: absolute;
+    background-image: url(./player.png);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ennemy {
+    position: absolute;
+    background-image: url(./ennemy.png);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.bullet {
+    background-color: green;
+    position: absolute;
+}
+
+.score {
+    position: absolute;
+    margin: 0;
+    width: 10%;
+    background-color: grey;
+    text-align: center;
+}
