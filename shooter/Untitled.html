@@ -10,11 +10,17 @@
 <body>
     <div id="game" class="game">
         <div id="player" class="player"></div>
-        <div id="score" class="score">
-            <p>0</p>
+        <div class="score">
+            <p>Score: <span id="score">0</span></p>
+        </div>
+        <div class="hp">
+            <p>Vie: <span id="hp">3</span></p>
         </div>
     </div>
     <script>
+        let hp = 3
+        let step = 2
+        let numberTouch = 0
         let press = null;
         let code = null;
         const playerWidth = 100;
@@ -22,7 +28,7 @@
         const ennemyWidth = 70;
         const ennemyHeight = 70;
         const bulletWidth = 10;
-        const bulletHeight = 10;
+        const bulletHeight = 30;
         const ennemies = [];
         const bullets = []
         let playerLeft = (window.innerWidth - playerWidth) / 2;
@@ -75,22 +81,35 @@
 
         generate()
 
+        //Score
+        function scores() {
+            numberTouch += 100;
+            document.getElementById('score').innerHTML = numberTouch;
+            step += 1;
+        }
+
+        //Vie
+        function HealPoints() {
+            hp -= 1;
+            Document.getElementById('hp').innerHTML = hp;
+        }
+
         //DRAW-------
         function draw () {
             if (press && code == 39 && playerLeft < window.innerWidth - playerWidth) {
-                playerLeft += 5;
+                playerLeft += 10;
             }
             
             if (press && code == 37 && playerLeft >=0) {
-                playerLeft -= 5;
+                playerLeft -= 10;
             }
 
             if (press && code == 38 && playerTop > 0) {
-                playerTop -= 5;
+                playerTop -= 10;
             }
 
             if (press && code == 40 && playerTop < window.innerHeight - playerHeight) {
-                playerTop += 5;
+                playerTop += 10;
             }
             player.style.left = playerLeft + 'px';
             player.style.top = playerTop + 'px';
@@ -98,7 +117,7 @@
             //draw ennemie
             for (let index = 0; index < ennemies.length; index++) {
                 const ennemy = ennemies[index];
-                ennemy.style.top = (parseInt(ennemy.style.top) + 2) + 'px';
+                ennemy.style.top = (parseInt(ennemy.style.top) + step) + 'px';
 
                 if (parseInt(ennemy.style.top) > window.innerHeight - ennemyHeight) {
                     game.removeChild(ennemy);
@@ -109,7 +128,7 @@
             //draw bullet
             for (let index = 0; index < bullets.length; index++) {
                 const bullet = bullets[index];
-                bullet.style.top = (parseInt(bullet.style.top) - 2) + 'px';
+                bullet.style.top = (parseInt(bullet.style.top) - 20) + 'px';
 
                 if (parseInt(bullet.style.top) <0) {
                     game.removeChild(bullet);
@@ -129,26 +148,28 @@
                     && bullet.offsetTop + (bullet.clientHeight) < ennemy.offsetTop + ennemy.clientHeight) {
                         game.removeChild(ennemy);
                         ennemies.splice(i, 1);
+                        scores();
 
                         game.removeChild(bullet);
                         bullets.splice(j, 1);
                     }
-                }
+                
 
-                if (player.offsetLeft + player.clinetWdth > ennemy.offsetLeft
-                && player.offsetLeft + player.clientWidth < ennemy.offsetLeft + ennemy.clientWdth
-                && player.offsetTop + player.clientHeight > ennemy.offsetTop
-                && player/offsetTop + player.clientHeight < ennemy.offsetTop + ennemy.clientHeight) {
-                    game.removeChild(player);
+                    if(player.offsetLeft +(player.clientWidth) > ennemy.offsetLeft
+                    && player.offsetLeft +(player.clientWidth) < ennemy.offsetLeft + ennemy.clientWidth
+                    && player.offsetTop +(player.clientHeight) > ennemy.offsetTop
+                    && player.offsetTop + (player.clientHeight) < ennemy.offsetTop + ennemy.clientHeight) {
+                        game.removeChild(ennemy);
+                        ennemies.splice(i, 1);
+                        scores();
+                    }
                 }
             }
-
+            
             requestAnimationFrame(draw);
         }
 
         draw();
-
-        
 
     </script>
 </body>
