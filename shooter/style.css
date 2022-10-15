@@ -29,7 +29,10 @@ body {
 }
 
 .bullet {
-    background-color: green;
+    background-image: url(./laser.png);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
     position: absolute;
 }
 
@@ -37,6 +40,16 @@ body {
     position: absolute;
     margin: 0;
     width: 10%;
-    background-color: grey;
+    background-color: #fff;
     text-align: center;
+}
+
+.hp {
+    position: absolute;
+    margin-top: 0;
+    margin-left: 90%;
+    width: 10%;
+    background-color: #fff;
+    text-align: center;
+    
 }
