@@ -155,13 +155,15 @@
                     }
                 
 
-                    if(player.offsetLeft +(player.clientWidth) > ennemy.offsetLeft
-                    && player.offsetLeft +(player.clientWidth) < ennemy.offsetLeft + ennemy.clientWidth
-                    && player.offsetTop +(player.clientHeight) > ennemy.offsetTop
-                    && player.offsetTop + (player.clientHeight) < ennemy.offsetTop + ennemy.clientHeight) {
-                        console.log('lol')
-                    }
+                    
                 }
+            
+                if(player.offsetLeft  < ennemy.offsetLeft
+                    && player.offsetLeft + player.clientWidth> ennemy.offsetLeft + ennemy.clientWidth
+                    && player.offsetTop  < ennemy.offsetTop
+                    && player.offsetTop + player.clientHeight > ennemy.offsetTop + ennemy.clientHeight) {
+                     console.log('lol')   
+                    }
             }
             
             requestAnimationFrame(draw);
